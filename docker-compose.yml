@@ -1,0 +1,9 @@
+services:
+  chatbot:
+    build: .
+    container_name: banking-chatbot
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

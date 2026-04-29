@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/
+env/
+
+# Ignore local datasets and big models
+data/tmp_model.pkl
+data/train.csv
+data/test.csv
+
+# Allow production model
+!data/classifier_model.pkl
+!data/tfidf_model.pkl
