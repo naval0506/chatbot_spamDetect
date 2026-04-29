@@ -7,7 +7,7 @@ import streamlit as st, sys, os, time
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 from chatbot_model import ChatbotBanking
 
-st.set_page_config(page_title="Banking Chatbot", page_icon="🏦",
+st.set_page_config(page_title="Bannki", page_icon="🏦",
                    layout="centered", initial_sidebar_state="expanded")
 
 st.markdown("""
@@ -41,7 +41,7 @@ if page == "💬 Chatbot":
     if "msgs" not in st.session_state:
         st.session_state.msgs = [{
             "role": "assistant", "content":
-            "👋 Hello! I'm your **banking assistant**. "
+            "👋 Hello! I'm **Bannki**. "
             "Ask me anything about cards, transfers, top-up and more!", "meta": {}}]
     if "n_q" not in st.session_state:
         st.session_state.n_q = 0
@@ -78,7 +78,7 @@ if page == "💬 Chatbot":
     # ── Hero ──
     st.markdown("""
     <div class="hero">
-      <h2>🏦 Banking Virtual Assistant</h2>
+      <h2>🏦 Bannki</h2>
       <p>Powered by Banking77 Dataset · TF-IDF &amp; Logistic Regression</p>
     </div>""", unsafe_allow_html=True)
 
