@@ -70,7 +70,7 @@ class ModelTrainer:
         X_test, y_test = df_test['text'], df_test['label']
 
         if progress_callback:
-            progress_callback(0.20, "Fitting TF-IDF + Logistic Regression…")
+            progress_callback(0.20, "Fitting TF-IDF + LinearSVC...")
 
         self.pipeline.fit(X_train, y_train)
 
@@ -229,12 +229,12 @@ class ModelTrainer:
         lines.append("1. **FeatureUnion** : Combinaison de deux extracteurs TF-IDF complémentaires :")
         lines.append("   - **Word n-grams (1-3)** : 30 000 features, capture les expressions multi-mots (`how do i`, `my card`).")
         lines.append("   - **Character n-grams (2-5)** : 50 000 features, capture les motifs infra-mot et les fautes de frappe.")
-        lines.append("2. **LinearSVC** : Support Vector Machine linéaire, plus performant que LogisticRegression sur les données textuelles à haute dimensionnalité.")
+        lines.append("2. **LinearSVC** : Support Vector Machine linéaire adapté aux données textuelles à haute dimensionnalité.")
         lines.append("3. **CalibratedClassifierCV** : Wrapper pour fournir `predict_proba()` avec calibration Platt (nécessaire pour le chatbot).")
         lines.append("4. **class_weight='balanced'** : Pondération automatique des classes sous-représentées.")
         lines.append("5. **min_df=2, max_df=0.95** : Filtrage du bruit (mots trop rares ou trop fréquents).\n")
         lines.append("### Résultat")
-        lines.append("Ces optimisations ont permis une amélioration significative de la précision par rapport au modèle de base (TF-IDF simple + LogisticRegression).\n")
+        lines.append("Ces choix ont permis d'obtenir un classifieur d'intention fiable tout en respectant la contrainte Python + scikit-learn.\n")
 
         if self.classification_report_text:
             lines.append("\n## Classification Report (Per Class)\n")

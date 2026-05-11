@@ -25,7 +25,7 @@ subprocess.check_call([sys.executable, "-m", "pip", "install"] + pkgs)
 
 # ── Étape 2 : Télécharger banking77 ──────────────────────────────────────────
 print("\n" + "=" * 55)
-print("Étape 2/4 — Téléchargement du dataset banking77...")
+print("Étape 2/5 — Téléchargement du dataset banking77...")
 print("(~5 MB, nécessite internet)")
 print("=" * 55)
 
@@ -47,15 +47,19 @@ df_test["label_name"]  = df_test["label"].apply(lambda x: label_names[x])
 # Sauvegarder
 train_path = os.path.join(DATA, "train.csv")
 test_path  = os.path.join(DATA, "test.csv")
-df_train[["text", "label_name"]].rename(columns={"label_name": "label"}).to_csv(train_path, index=False)
-df_test[["text",  "label_name"]].rename(columns={"label_name": "label"}).to_csv(test_path,  index=False)
 
-print(f"[OK] train.csv : {len(df_train)} lignes")
-print(f"[OK] test.csv  : {len(df_test)} lignes")
+df_train_cleaned = df_train[["text", "label_name"]].rename(columns={"label_name": "label"})
+df_test_cleaned  = df_test[["text",  "label_name"]].rename(columns={"label_name": "label"})
+
+df_train_cleaned.to_csv(train_path, index=False)
+df_test_cleaned.to_csv(test_path,  index=False)
+
+print(f"[OK] train.csv : {len(df_train_cleaned)} lignes")
+print(f"[OK] test.csv  : {len(df_test_cleaned)} lignes")
 
 # ── Étape 3 : Construire la base FAQ + entraîner TF-IDF ──────────────────────
 print("\n" + "=" * 55)
-print("Étape 3/4 — Construction de la base FAQ...")
+print("Étape 3/5 — Construction de la base FAQ...")
 print("=" * 55)
 
 sys.path.insert(0, os.path.join(BASE, "src"))
@@ -66,12 +70,21 @@ df_raw = charger_banking77()
 df_faq = construire_faq(df_raw)
 
 print("\n" + "=" * 55)
-print("Étape 4/4 — Entraînement du modèle TF-IDF...")
+print("Étape 4/5 — Entraînement du modèle TF-IDF...")
 print("=" * 55)
 
 ext = FeatureExtractor()
 ext.entrainer(df_faq["question_clean"].tolist())
 ext.sauvegarder(os.path.join(DATA, "tfidf_model.pkl"))
+
+print("\n" + "=" * 55)
+print("Étape 5/5 — Entraînement du classifieur d'intention...")
+print("=" * 55)
+
+from trainer import ModelTrainer
+trainer = ModelTrainer()
+trainer.train(df_train_cleaned, df_test_cleaned)
+trainer.save(os.path.join(DATA, "classifier_model.pkl"))
 
 print("\n" + "=" * 55)
 print("✅  Setup terminé !")
